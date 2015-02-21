@@ -1,5 +1,22 @@
 #include "keyboard.h"
 
+Keyboard::Keyboard(string filename)
+{
+    ifstream ifp(filename);
+    if(!ifp.is_open())
+    {
+        cout << "Failed to open file" << endl;
+        return;
+    }
+
+    //Just assuming valid input
+    for(int i = 0; i < 5; ++i) {
+        //Load stuff in
+    }
+
+    ifp.close();
+}
+
 unsigned int Keyboard::getKeyWidth(sf::Keyboard::Key k) const
 {
     switch(k)
@@ -27,7 +44,7 @@ unsigned int Keyboard::getKeyWidth(sf::Keyboard::Key k) const
             break;
     }
 }
-sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::k) const
+sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::Key k) const
 {
     //Two counters while we iterate
     int yOffset = 0;
@@ -36,9 +53,9 @@ sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::k) const
     for(auto row: layout) {
         for (auto key: row) {
             if (k == key)
-                return sf::Vector2f(xOffset * getKeyWidth(k), yOffset * 40);
+                return sf::Vector2f(xOffset, yOffset * 40);
             //Not this key, increment xOffset to keep looking
-            xOffset++;
+            xOffset += getKeyWidth(k);
         }
         //Reset xpos, we didn't find it
         xOffset = 0;
