@@ -5,10 +5,13 @@ using namespace std;
 
 void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Text & t)
 {
+    //Test clause to make screen light up
     if(!k.getKeysDown().empty())
     {
-        sf::Keyboard::Key test = k.getKeysDown()[0];
-        string textStuff = k.getTextFromKey(test);
+        //sf::Keyboard::Key test = k.getKeysDown()[0];
+        string textStuff;
+        for(auto key: k.getKeysDown())
+            textStuff += k.getTextFromKey(key);
 
         t.setString(textStuff);
         t.setPosition(400,300);
@@ -33,6 +36,16 @@ void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Text & t)
         }*/
 }
 
+void handleEvents(sf::RenderWindow & r)
+{
+    sf::Event event;
+    while(r.pollEvent(event))
+    {
+        if(event.type == sf::Event::Closed)
+            r.close();
+    }
+}
+
 int main() {
     Keyboard k("qwerty.txt");
     sf::Font f;
@@ -41,6 +54,7 @@ int main() {
     t.setFont(f);
     sf::RenderWindow window(sf::VideoMode(800, 600), "Keyboard HeatMap");
     while(window.isOpen()) {
+        handleEvents(window);
         drawKeyboard(k, window, t);
         window.display();
         window.clear();

@@ -2,66 +2,55 @@
 
 Keyboard::Keyboard(string filename)
 {
-    ifstream ifp(filename);
+    //No layout files exist yet
+    /*ifstream ifp(filename);
     if(!ifp.is_open())
     {
         cout << "Failed to open file" << endl;
         return;
     }
 
-    ifp.close();
+    ifp.close();*/
 }
 
 string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
 {
     int enumCode = int(k);
-    cout << "Keycode from enum: " << enumCode <<endl;
-    cout << "Character from enum: " << char(enumCode + 65) <<endl;
+    //Is it a letter?
     if(enumCode < 26) {
         char alpha = char(enumCode + 65);
         string toRet = "";
         toRet += alpha;
         return toRet;
     }
-
     switch(k)
     {
         case sfkk::LShift:
             return "Shift";
-            break;
         case sfkk::RShift:
             return "Shift";
-            break;
         case sfkk::LAlt:
             return "Alt";
-            break;
         case sfkk::RAlt:
             return "Alt";
-            break;
         case sfkk::Tab:
             return "Tab";
-            break;
         case sfkk::LControl:
             return "Ctrl";
-            break;
         case sfkk::RControl:
             return "Ctrl";
-            break;
         case sfkk::LSystem:
             return "Super";
-            break;
         case sfkk::RSystem:
             return "Super";
-            break;
         case sfkk::BackSpace:
             return "Backspace";
-            break;
         case sfkk::Return:
             return "Enter";
-            break;
+        case sfkk::Space:
+            return "Space";
         default:
             return "Caps Lock";
-            break;
     }
 }
 
@@ -71,25 +60,19 @@ unsigned int Keyboard::getKeyWidth(sf::Keyboard::Key k) const
     {
         case sfkk::Tab:
             return 80;
-            break;
         case sfkk::Unknown:
             return 90;
-            break;
         case sfkk::LShift:
             return 120;
-            break;
         case sfkk::RShift:
             return 120;
-            break;
         case sfkk::BackSpace:
             return 90;
-            break;
         case sfkk::Return:
             return 120;
-            break;
+        //Normal Sized keys
         default:
             return 40;
-            break;
     }
 }
 sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::Key k) const
