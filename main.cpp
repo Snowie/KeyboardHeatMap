@@ -3,11 +3,18 @@
 #include "keyboard.h"
 using namespace std;
 
-sf::RenderWindow window(sf::VideoMode(800, 600), "Keyboard HeatMap");
-
-void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Font & f)
+void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Text & t)
 {
-    for(auto row: k.getLayout())
+    if(!k.getKeysDown().empty())
+    {
+        sf::Keyboard::Key test = k.getKeysDown()[0];
+        string textStuff = k.getTextFromKey(test);
+
+        t.setString(textStuff);
+        t.setPosition(400,300);
+        r.draw(t);
+    }
+    /*for(auto row: k.getLayout())
         for(auto key: row)
         {
             //Draw the key
@@ -23,15 +30,21 @@ void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Font & f)
             keyText.setString(k.getTextFromKey(key));
             keyText.setPosition(textPos);
             r.draw(keyText);
-        }
+        }*/
 }
 
 int main() {
     Keyboard k("qwerty.txt");
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Keyboard HeatMap");
     sf::Font f;
-    f.loadFromFile("arial.ttf");
-    drawKeyboard(k, window, f);
-    cout << "Hello, World!" << endl;
+    sf::Text t;
+    f.loadFromFile("Minecraftia.ttf");
+    t.setFont(f);
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Keyboard HeatMap");
+    while(window.isOpen()) {
+        drawKeyboard(k, window, t);
+        window.display();
+        window.clear();
+    }
+    window.close();
     return 0;
 }

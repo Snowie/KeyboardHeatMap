@@ -9,18 +9,20 @@ Keyboard::Keyboard(string filename)
         return;
     }
 
-    //Just assuming valid input
-    for(int i = 0; i < 5; ++i) {
-        ;//Load stuff in
-    }
-
     ifp.close();
 }
 
 string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
 {
-    if(k < 26)
-        return "" + (char(k) + 65);
+    int enumCode = int(k);
+    cout << "Keycode from enum: " << enumCode <<endl;
+    cout << "Character from enum: " << char(enumCode + 65) <<endl;
+    if(enumCode < 26) {
+        char alpha = char(enumCode + 65);
+        string toRet = "";
+        toRet += alpha;
+        return toRet;
+    }
 
     switch(k)
     {
@@ -29,6 +31,12 @@ string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
             break;
         case sfkk::RShift:
             return "Shift";
+            break;
+        case sfkk::LAlt:
+            return "Alt";
+            break;
+        case sfkk::RAlt:
+            return "Alt";
             break;
         case sfkk::Tab:
             return "Tab";
