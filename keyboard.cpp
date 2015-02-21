@@ -11,10 +11,50 @@ Keyboard::Keyboard(string filename)
 
     //Just assuming valid input
     for(int i = 0; i < 5; ++i) {
-        //Load stuff in
+        ;//Load stuff in
     }
 
     ifp.close();
+}
+
+string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
+{
+    if(k < 26)
+        return "" + (char(k) + 65);
+
+    switch(k)
+    {
+        case sfkk::LShift:
+            return "Shift";
+            break;
+        case sfkk::RShift:
+            return "Shift";
+            break;
+        case sfkk::Tab:
+            return "Tab";
+            break;
+        case sfkk::LControl:
+            return "Ctrl";
+            break;
+        case sfkk::RControl:
+            return "Ctrl";
+            break;
+        case sfkk::LSystem:
+            return "Super";
+            break;
+        case sfkk::RSystem:
+            return "Super";
+            break;
+        case sfkk::BackSpace:
+            return "Backspace";
+            break;
+        case sfkk::Return:
+            return "Enter";
+            break;
+        default:
+            return "Caps Lock";
+            break;
+    }
 }
 
 unsigned int Keyboard::getKeyWidth(sf::Keyboard::Key k) const
@@ -53,20 +93,34 @@ sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::Key k) const
     for(auto row: layout) {
         for (auto key: row) {
             if (k == key)
-                return sf::Vector2f(xOffset, yOffset * 40);
+                return sf::Vector2f(xOffset, yOffset);
+
             //Not this key, increment xOffset to keep looking
             xOffset += getKeyWidth(k);
         }
-        //Reset xpos, we didn't find it
+        //Reset xOffset, we didn't find it
         xOffset = 0;
         //Checking the next row down, increment the y offset
-        yOffset++;
+        yOffset += 40;
     }
 
     //We couldn't find the key pressed, just set it to default of unknown
     return getKeyPosition(sfkk::Unknown);
 }
-void Keyboard::drawKeyboard() const
+
+vector<sf::Keyboard::Key> Keyboard::getKeysDown() const
 {
-    return;
+    vector<sf::Keyboard::Key> keysDown;
+
+    for (int i = 0; i < sf::Keyboard::KeyCount; ++i) {
+        sf::Keyboard::Key k = static_cast<sf::Keyboard::Key>(i);
+        if (sf::Keyboard::isKeyPressed(k))
+            keysDown.push_back(k);
+    }
+
+    return keysDown;
+}
+
+vector<vector<sfkk>> Keyboard::getLayout() const {
+    return layout;
 }
