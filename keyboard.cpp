@@ -2,15 +2,12 @@
 
 Keyboard::Keyboard(string filename)
 {
-    //No layout files exist yet
-    /*ifstream ifp(filename);
-    if(!ifp.is_open())
-    {
-        cout << "Failed to open file" << endl;
-        return;
-    }
-
-    ifp.close();*/
+    //I'm so sorry.
+    layout.push_back({sfkk::Tilde, sfkk::Num1, sfkk::Num2, sfkk::Num3, sfkk::Num4, sfkk::Num5, sfkk::Num6, sfkk::Num7, sfkk::Num8, sfkk::Num9, sfkk::Num0, sfkk::Subtract, sfkk::Equal, sfkk::BackSpace});
+    layout.push_back({sfkk::Tab, sfkk::Q, sfkk::W, sfkk::E, sfkk::R, sfkk::T, sfkk::Y, sfkk::U, sfkk::I, sfkk::O, sfkk::P, sfkk::LBracket, sfkk::RBracket, sfkk::BackSlash});
+    layout.push_back({sfkk::Unknown, sfkk::A, sfkk::S, sfkk::D, sfkk::F, sfkk::G, sfkk::H, sfkk::J, sfkk::K, sfkk::L, sfkk::SemiColon, sfkk::Quote, sfkk::Return});
+    layout.push_back({sfkk::LShift, sfkk::Z, sfkk::X, sfkk::C, sfkk::V, sfkk::B, sfkk::N, sfkk::M, sfkk::Comma, sfkk::Period, sfkk::Slash, sfkk::RShift});
+    layout.push_back({sfkk::LControl, sfkk::LSystem, sfkk::LAlt, sfkk::Space, sfkk::RAlt, sfkk::RSystem, sfkk::RControl});
 }
 
 string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
@@ -49,8 +46,12 @@ string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
             return "Enter";
         case sfkk::Space:
             return "Space";
-        default:
+        case sfkk::BackSlash:
+            return "\\";
+        case sfkk::Unknown:
             return "Caps Lock";
+        default:
+            return "?";
     }
 }
 
@@ -59,20 +60,36 @@ unsigned int Keyboard::getKeyWidth(sf::Keyboard::Key k) const
     switch(k)
     {
         case sfkk::Tab:
-            return 80;
+            return 60;
+        case sfkk::LAlt:
+            return 47;
+        case sfkk::RAlt:
+            return 48;
         case sfkk::Unknown:
-            return 90;
+            return 67;
         case sfkk::LShift:
-            return 120;
+            return 51;
         case sfkk::RShift:
-            return 120;
-        case sfkk::BackSpace:
-            return 90;
+            return 103;
+        case sfkk::RControl:
+            return 55;
+        case sfkk::LControl:
+            return 55;
+        case sfkk::LSystem:
+            return 46;
+        case sfkk::RSystem:
+            return 46;
+        case sfkk::Space:
+            return 230;
         case sfkk::Return:
-            return 120;
+            return 86;
+        case sfkk::BackSpace:
+            return 78;
+        case sfkk::BackSlash:
+            return 58;
         //Normal Sized keys
         default:
-            return 40;
+            return 37;
     }
 }
 sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::Key k) const
@@ -81,18 +98,16 @@ sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::Key k) const
     int yOffset = 0;
     int xOffset = 0;
 
-    for(auto row: layout) {
-        for (auto key: row) {
-            if (k == key)
+    for(int row = 0; row < layout.size(); ++row)
+    {
+        for(int column = 0; column < layout[row].size(); ++column)
+        {
+            if(layout[row][column] == k)
                 return sf::Vector2f(xOffset, yOffset);
-
-            //Not this key, increment xOffset to keep looking
-            xOffset += getKeyWidth(k);
+            xOffset += getKeyWidth(layout[row][column]) + 1;
         }
-        //Reset xOffset, we didn't find it
         xOffset = 0;
-        //Checking the next row down, increment the y offset
-        yOffset += 40;
+        yOffset += 41;
     }
 
     //We couldn't find the key pressed, just set it to default of unknown

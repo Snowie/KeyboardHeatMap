@@ -3,37 +3,40 @@
 #include "keyboard.h"
 using namespace std;
 
-void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Text & t)
+void drawActiveKeys(Keyboard k, sf::RenderWindow & r)
 {
-    //Test clause to make screen light up
-    if(!k.getKeysDown().empty())
-    {
-        //sf::Keyboard::Key test = k.getKeysDown()[0];
-        string textStuff;
-        for(auto key: k.getKeysDown())
-            textStuff += k.getTextFromKey(key);
+    vector<sfkk> activeKeys = k.getKeysDown();
 
-        t.setString(textStuff);
-        t.setPosition(400,300);
-        r.draw(t);
+    for(auto key: activeKeys)
+    {
+        sf::CircleShape activeMark;
+        activeMark.setRadius(5);
+        activeMark.setFillColor(sf::Color::Red);
+        activeMark.setPosition(k.getKeyPosition(key));
+        r.draw(activeMark);
     }
-    /*for(auto row: k.getLayout())
-        for(auto key: row)
-        {
+}
+
+void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Text & t) {
+    for (auto row: k.getLayout())
+        for (auto key: row) {
             //Draw the key
             sf::RectangleShape visualKey;
             visualKey.setSize(sf::Vector2f(k.getKeyWidth(key), 40));
             visualKey.setPosition(k.getKeyPosition(key));
             visualKey.setOutlineColor(sf::Color::Black);
+            visualKey.setOutlineThickness(1);
             r.draw(visualKey);
 
             //Draw the keytext
-            sf::Vector2f textPos = visualKey.getSize() * 0.5f;
-            sf::Text keyText;
-            keyText.setString(k.getTextFromKey(key));
-            keyText.setPosition(textPos);
-            r.draw(keyText);
-        }*/
+            sf::Vector2f textPos = k.getKeyPosition(key);
+            t.setString(k.getTextFromKey(key));
+            t.setPosition(textPos);
+            t.setCharacterSize(12);
+            t.setColor(sf::Color::Black);
+            r.draw(t);
+        }
+    drawActiveKeys(k, r);
 }
 
 void handleEvents(sf::RenderWindow & r)
@@ -52,7 +55,7 @@ int main() {
     sf::Text t;
     f.loadFromFile("Minecraftia.ttf");
     t.setFont(f);
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Keyboard HeatMap");
+    sf::RenderWindow window(sf::VideoMode(1440, 900), "Keyboard HeatMap");
     while(window.isOpen()) {
         handleEvents(window);
         drawKeyboard(k, window, t);
