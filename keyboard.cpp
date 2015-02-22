@@ -1,7 +1,6 @@
 #include "keyboard.h"
 
-Keyboard::Keyboard(string filename)
-{
+Keyboard::Keyboard(string filename) {
     //I'm so sorry.
     layout.push_back({sfkk::Tilde, sfkk::Num1, sfkk::Num2, sfkk::Num3, sfkk::Num4, sfkk::Num5, sfkk::Num6, sfkk::Num7, sfkk::Num8, sfkk::Num9, sfkk::Num0, sfkk::Subtract, sfkk::Equal, sfkk::BackSpace});
     layout.push_back({sfkk::Tab, sfkk::Q, sfkk::W, sfkk::E, sfkk::R, sfkk::T, sfkk::Y, sfkk::U, sfkk::I, sfkk::O, sfkk::P, sfkk::LBracket, sfkk::RBracket, sfkk::BackSlash});
@@ -10,18 +9,18 @@ Keyboard::Keyboard(string filename)
     layout.push_back({sfkk::LControl, sfkk::LSystem, sfkk::LAlt, sfkk::Space, sfkk::RAlt, sfkk::RSystem, sfkk::RControl});
 }
 
-string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
-{
+string Keyboard::getTextFromKey(sf::Keyboard::Key k) const {
     int enumCode = int(k);
+
     //Is it a letter?
-    if(enumCode < 26) {
+    if (enumCode < 26) {
         char alpha = char(enumCode + 65);
         string toRet = "";
         toRet += alpha;
         return toRet;
     }
-    switch(k)
-    {
+
+    switch (k) {
         case sfkk::LShift:
             return "Shift";
         case sfkk::RShift:
@@ -48,6 +47,46 @@ string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
             return "Space";
         case sfkk::BackSlash:
             return "\\";
+        case sfkk::Comma:
+            return ",";
+        case sfkk::Period:
+            return ".";
+        case sfkk::Slash:
+            return "/";
+        case sfkk::SemiColon:
+            return ";";
+        case sfkk::Quote:
+            return "\"";
+        case sfkk::LBracket:
+            return "[";
+        case sfkk::RBracket:
+            return "]";
+        case sfkk::Tilde:
+            return "`";
+        case sfkk::Num0:
+            return "0";
+        case sfkk::Num1:
+            return "1";
+        case sfkk::Num2:
+            return "2";
+        case sfkk::Num3:
+            return "3";
+        case sfkk::Num4:
+            return "4";
+        case sfkk::Num5:
+            return "5";
+        case sfkk::Num6:
+            return "6";
+        case sfkk::Num7:
+            return "7";
+        case sfkk::Num8:
+            return "8";
+        case sfkk::Num9:
+            return "9";
+        case sfkk::Subtract:
+            return "-";
+        case sfkk::Equal:
+            return "=";
         case sfkk::Unknown:
             return "Caps Lock";
         default:
@@ -55,10 +94,8 @@ string Keyboard::getTextFromKey(sf::Keyboard::Key k) const
     }
 }
 
-unsigned int Keyboard::getKeyWidth(sf::Keyboard::Key k) const
-{
-    switch(k)
-    {
+unsigned int Keyboard::getKeyWidth(sf::Keyboard::Key k) const {
+    switch (k) {
         case sfkk::Tab:
             return 60;
         case sfkk::LAlt:
@@ -87,24 +124,22 @@ unsigned int Keyboard::getKeyWidth(sf::Keyboard::Key k) const
             return 78;
         case sfkk::BackSlash:
             return 58;
-        //Normal Sized keys
+            //Normal Sized Keys
         default:
             return 37;
     }
 }
-sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::Key k) const
-{
+
+sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::Key k) const {
     //Two counters while we iterate
     int yOffset = 0;
     int xOffset = 0;
 
-    for(int row = 0; row < layout.size(); ++row)
-    {
-        for(int column = 0; column < layout[row].size(); ++column)
-        {
-            if(layout[row][column] == k)
+    for (auto row: getLayout()) {
+        for (auto key: row) {
+            if (key == k)
                 return sf::Vector2f(xOffset, yOffset);
-            xOffset += getKeyWidth(layout[row][column]) + 1;
+            xOffset += getKeyWidth(key) + 1;
         }
         xOffset = 0;
         yOffset += 41;
@@ -114,8 +149,7 @@ sf::Vector2f Keyboard::getKeyPosition(sf::Keyboard::Key k) const
     return getKeyPosition(sfkk::Unknown);
 }
 
-vector<sf::Keyboard::Key> Keyboard::getKeysDown() const
-{
+vector<sf::Keyboard::Key> Keyboard::getKeysDown() const {
     vector<sf::Keyboard::Key> keysDown;
 
     for (int i = 0; i < sf::Keyboard::KeyCount; ++i) {

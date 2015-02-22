@@ -1,24 +1,23 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "keyboard.h"
+
 using namespace std;
 
-void drawActiveKeys(Keyboard k, sf::RenderWindow & r)
-{
+void drawActiveKeys(Keyboard k, sf::RenderWindow &r) {
     vector<sfkk> activeKeys = k.getKeysDown();
 
-    for(auto key: activeKeys)
-    {
+    for (auto key: activeKeys) {
         sf::CircleShape activeMark;
         activeMark.setRadius(5);
         activeMark.setOrigin(5, 5);
         activeMark.setFillColor(sf::Color::Red);
-        activeMark.setPosition(k.getKeyPosition(key) + sf::Vector2f(k.getKeyWidth(key)/2.0,20));
+        activeMark.setPosition(k.getKeyPosition(key) + sf::Vector2f(k.getKeyWidth(key) / 2.0f, 20));
         r.draw(activeMark);
     }
 }
 
-void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Text & t) {
+void drawKeyboard(Keyboard k, sf::RenderWindow &r, sf::Text &t) {
     for (auto row: k.getLayout())
         for (auto key: row) {
             //Draw the key
@@ -40,12 +39,10 @@ void drawKeyboard(Keyboard k, sf::RenderWindow & r, sf::Text & t) {
     drawActiveKeys(k, r);
 }
 
-void handleEvents(sf::RenderWindow & r)
-{
+void handleEvents(sf::RenderWindow &r) {
     sf::Event event;
-    while(r.pollEvent(event))
-    {
-        if(event.type == sf::Event::Closed)
+    while (r.pollEvent(event)) {
+        if (event.type == sf::Event::Closed)
             r.close();
     }
 }
@@ -57,7 +54,8 @@ int main() {
     f.loadFromFile("Minecraftia.ttf");
     t.setFont(f);
     sf::RenderWindow window(sf::VideoMode(1440, 900), "Keyboard HeatMap");
-    while(window.isOpen()) {
+
+    while (window.isOpen()) {
         handleEvents(window);
         drawKeyboard(k, window, t);
         window.display();
