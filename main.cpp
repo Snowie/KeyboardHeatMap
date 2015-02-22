@@ -11,8 +11,9 @@ void drawActiveKeys(Keyboard k, sf::RenderWindow & r)
     {
         sf::CircleShape activeMark;
         activeMark.setRadius(5);
+        activeMark.setOrigin(5, 5);
         activeMark.setFillColor(sf::Color::Red);
-        activeMark.setPosition(k.getKeyPosition(key));
+        activeMark.setPosition(k.getKeyPosition(key) + sf::Vector2f(k.getKeyWidth(key)/2.0,20));
         r.draw(activeMark);
     }
 }
